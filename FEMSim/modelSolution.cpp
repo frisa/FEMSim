@@ -2,7 +2,7 @@
 
 ModelSolution::ModelSolution(QDomDocument document, QObject *parent) : QAbstractItemModel(parent), domDocument(document)
 {
-	log0("[%s] document: %s", __FUNCTION__, document.toString().toLatin1());
+	//log0("[%s] document: %s", __FUNCTION__, document.toString().toLatin1().data());
     rootItem = new ModelSolutionItem(domDocument, 0);
 }
 
@@ -38,7 +38,7 @@ QVariant ModelSolution::headerData(int section, Qt::Orientation orientation, int
                 ret = QVariant();
         }
     }
-	log0("[%s] seciton = %d, ret = %d", __FUNCTION__, ret, section);
+	//log0("[%s] seciton = %d, ret = %d", __FUNCTION__, ret, section);
     return ret;
 }
 
@@ -86,7 +86,7 @@ Q_INVOKABLE QModelIndex ModelSolution::index(int row, int column, const QModelIn
             ret = QModelIndex();
         }
     }
-	log0("[%s] r=%d, c=%d, idx.internalId=%d", __FUNCTION__, row, column, ret.internalId());
+	//log0("[%s] r=%d, c=%d, idx.internalId=%d", __FUNCTION__, row, column, ret.internalId());
     return ret;
 }
 
@@ -111,7 +111,7 @@ Q_INVOKABLE QModelIndex ModelSolution::parent(const QModelIndex & child) const
             ret = createIndex(parentItem->row(), 0, parentItem);
         }
     }
-	log0("[%s] ret = %d", __FUNCTION__, ret);
+	//log0("[%s] ret = %d", __FUNCTION__, ret);
     return ret;
 }
 
@@ -134,14 +134,14 @@ Q_INVOKABLE int ModelSolution::rowCount(const QModelIndex & parent) const
         parentItem = static_cast<ModelSolutionItem*>(parent.internalPointer());
     }
     ret = parentItem->node().childNodes().count();
-	log0("[%s] ret = %d", __FUNCTION__, ret);
+	//log0("[%s] ret = %d", __FUNCTION__, ret);
     return ret;
 }
 
 Q_INVOKABLE int ModelSolution::columnCount(const QModelIndex & parent) const
 {
     int ret = COUNT_OF_COLUMNS;
-	log0("[%s] ret = %d", __FUNCTION__, ret);
+	//log0("[%s] ret = %d", __FUNCTION__, ret);
     return ret;
 }
 
@@ -167,7 +167,7 @@ Q_INVOKABLE QVariant ModelSolution::data(const QModelIndex & index, int role) co
 
         }
     }
-    log0("[%s] column = %d, ret = %d", __FUNCTION__, ret, i32Column);
+    //log0("[%s] column = %d, ret = %d", __FUNCTION__, ret, i32Column);
     return ret;
 }
 
@@ -223,21 +223,30 @@ QVariant ModelSolution::parseElementSolution(const QModelIndex & index, ModelSol
         }
         case COLUMN1:
         {
-			if (domElement.hasAttribute("x") && domElement.hasAttribute("y"))
+			if (domElement.hasAttribute("GLenum"))
 			{
 				QString str;
-				str.append("x = ");
-				str.append(domElement.attribute("x"));
-				str.append(", ");
-				str.append("y = ");
-				str.append(domElement.attribute("y"));
+				str.append("GLenum = ");
+				str.append(domElement.attribute("GLenum"));
 				ret = str;
 			}
             break;
         }
         case COLUMN2:
         {
-            break;
+			if (domElement.hasAttribute("x") && domElement.hasAttribute("y") && domElement.hasAttribute("z"))
+			{
+				QString str;
+				str.append("[");
+				str.append(domElement.attribute("x"));
+				str.append(",");
+				str.append(domElement.attribute("y"));
+				str.append(",");
+				str.append(domElement.attribute("z"));
+				str.append("]");
+				ret = str;
+			}
+			break;
         }
 		default:
 		{

@@ -9,12 +9,27 @@ ViewModelWindow::ViewModelWindow(QWidget *parent)
 	//ui.ModelGLWidget = new QtModelWidget();
 
 	/* Initialize connection */
-	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(OpenModel()));
+	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(openModelSlot()));
 
 	UtilLoggerSingleton::instance()->addOutput(m_SolutionOutputId, ui.tbSolutionLog);
 	UtilLoggerSingleton::instance()->addOutput(m_ModelOutputId, ui.tbModelLog);
 
 	ViewModelWindow::LoadDefaultModel();
+}
+
+void ViewModelWindow::selectionChangedSlot(const QItemSelection &, const QItemSelection &)
+{
+	const QModelIndex index = this->ui.SolutionTreeView->selectionModel()->currentIndex();
+	QString selectedText = index.data(Qt::DisplayRole).toString();
+	int hierarchyLevel = 1;
+	QModelIndex seekRoot = index;
+	char cShowString[500];
+	while (seekRoot.parent() != QModelIndex())
+	{
+		seekRoot = seekRoot.parent();
+		hierarchyLevel++;
+	}
+	log0("-> selected[%d]: %s", hierarchyLevel, selectedText.toLatin1().data());
 }
 
 void ViewModelWindow::LoadDefaultModel(QString sFilePath)
@@ -25,7 +40,8 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 	QDomElement domRootSolutionElement;
 	QDomElement domProjectElement;
 	QDomElement domModelElement;
-	QDomElement domCubeElement;
+	QDomElement domPartElement;
+	QDomElement domVertexElement;
 
 	QDomNodeList domNodeList;
 	QDomText	domText;
@@ -68,11 +84,28 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 		domModelElement.setAttribute("name", "Model (Shaders)");
 		domProjectElement.appendChild(domModelElement);
 
-		domCubeElement = domDocument->createElement("part");
-		domCubeElement.setAttribute("name", "Cube1");
-		domCubeElement.setAttribute("x", "10");
-		domCubeElement.setAttribute("y", "20");
-		domModelElement.appendChild(domCubeElement);
+		domPartElement = domDocument->createElement("part");
+		domPartElement.setAttribute("name", "PointCloud");
+		domPartElement.setAttribute("GLenum", "GL_POINTS");
+		domModelElement.appendChild(domPartElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "0.00");
+		domVertexElement.setAttribute("y", "0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "0.75");
+		domVertexElement.setAttribute("y", "-0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "-0.75");
+		domVertexElement.setAttribute("y", "-0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
 
 		fSolutionFile->write(domDocument->toByteArray());
 		fSolutionFile->close();
@@ -104,7 +137,12 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 
 	/* Set the layout of the tree view */
 	this->ui.SolutionTreeView->expandAll();
-	this->ui.SolutionTreeView->setColumnWidth(0, 150);
+	this->ui.SolutionTreeView->setColumnWidth(0, 170);
+	this->ui.SolutionTreeView->setColumnWidth(1, 130);
+
+	QItemSelectionModel *selectionModel = this->ui.SolutionTreeView->selectionModel();
+	connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+		this, SLOT(selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 }
 
 void ViewModelWindow::LoadModel(QString sFilePath)
@@ -115,12 +153,11 @@ void ViewModelWindow::SaveModel(QString sFilePath)
 {
 }
 
-void ViewModelWindow::OpenModel()
+void ViewModelWindow::openModelSlot()
 {
 	QString xmlPath = "E:\\E:\solution.xml";
 	QString filePath = QFileDialog::getOpenFileName(this, "Open solution file", xmlPath, "XML files (*.xml)");
-	log0("File: [%s]", filePath.toLatin1());
-	QMessageBox msg;
+	log0("File: [%s]", filePath.toLatin1().data());
 
 	if (!filePath.isEmpty()) 
 	{
@@ -130,25 +167,29 @@ void ViewModelWindow::OpenModel()
 			QDomDocument document;
 			if (document.setContent(&file)) 
 			{
-				log0("[%s] FilePath = %s", __FUNCTION__, filePath.toLatin1().constData());
+				log0("[%s] Open %s", __FUNCTION__, filePath.toLatin1().constData());
 				ModelSolution *newModel = new ModelSolution(document, this);
 				try {
 					ui.SolutionTreeView->setModel(newModel);
 					delete solutionModel;
 					solutionModel = newModel;
 					xmlPath = filePath;
+					/* Set the layout of the tree view */
+					this->ui.SolutionTreeView->expandAll();
+					this->ui.SolutionTreeView->setColumnWidth(0, 200);
+
+					QItemSelectionModel *selectionModel = this->ui.SolutionTreeView->selectionModel();
+					connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+						this, SLOT(selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 				}
 				catch (std::exception &e)
 				{
-					//QMessageBox(this, "Exception", e.what(), QMessageBox::Ok);
-					log0("Exception: %s\n", e.what());
+					QMessageBox::critical(this, "The file can not be open", QString(e.what()), QMessageBox::Ok);
 				}
-
 			}
 			else
 			{
-				msg.setText("The XML file cannot be opened");
-				msg.exec();
+				QMessageBox::critical(this, "The file open error", "File" + filePath + "can not be open.", QMessageBox::Ok);
 			}
 			file.close();
 		}

@@ -32,5 +32,6 @@ public:
 	void SaveModel(QString sFilePath);
 
 private slots:
-	void OpenModel();
+	void openModelSlot();
+	void selectionChangedSlot(const QItemSelection &, const QItemSelection &);
 };
