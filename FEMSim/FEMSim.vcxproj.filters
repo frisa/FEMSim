@@ -57,6 +57,15 @@
     <ClCompile Include="viewModelWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utilLoggerSingleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilVertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilAbstractLoggedClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FEMSim.qrc">
@@ -84,6 +93,15 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_view.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilLoggerSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilAbstractLoggedClass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -167,7 +167,7 @@ Q_INVOKABLE QVariant ModelSolution::data(const QModelIndex & index, int role) co
 
         }
     }
-    qDebug("[%s] column = %d, ret = %d", __FUNCTION__, ret, i32Column);
+    log0("[%s] column = %d, ret = %d", __FUNCTION__, ret, i32Column);
     return ret;
 }
 
@@ -247,4 +247,5 @@ QVariant ModelSolution::parseElementSolution(const QModelIndex & index, ModelSol
     }
 	return ret;
 }
+
 

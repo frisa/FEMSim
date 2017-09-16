@@ -73,6 +73,9 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_viewModelWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="utilAbstractLoggedClass.cpp" />
+    <ClCompile Include="utilLoggerSingleton.cpp" />
+    <ClCompile Include="utilVertex.cpp" />
     <ClCompile Include="viewModelWindow.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_modelSolution.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -113,6 +116,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="utilAbstractLoggedClass.h" />
+    <ClInclude Include="utilLoggerSingleton.h" />
+    <ClInclude Include="utilVertex.h" />
     <CustomBuild Include="glWorldWidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing QtModelWidget.h...</Message>

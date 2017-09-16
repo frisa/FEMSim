@@ -1,4 +1,5 @@
 #include "viewModelWindow.h"
+
 using namespace std;
 
 ViewModelWindow::ViewModelWindow(QWidget *parent)
@@ -9,6 +10,9 @@ ViewModelWindow::ViewModelWindow(QWidget *parent)
 
 	/* Initialize connection */
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(OpenModel()));
+
+	UtilLoggerSingleton::instance()->addOutput(m_SolutionOutputId, ui.tbSolutionLog);
+	UtilLoggerSingleton::instance()->addOutput(m_ModelOutputId, ui.tbModelLog);
 
 	ViewModelWindow::LoadDefaultModel();
 }
@@ -35,22 +39,23 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 
 	if (!fSolutionFile->exists())
 	{
-		qDebug("[%s] File %s does not exist and will be created", __FUNCTION__, sSolutionFile.toLatin1().constData());
+		log0("File %s does not exist and will be created", sSolutionFile.toLatin1().constData());
 	}
 	else
 	{
-		qDebug("[%s] File %s does exist", __FUNCTION__, sSolutionFile.toLatin1().constData());
+		log0("File %s does exist", sSolutionFile.toLatin1().constData());
 	}
 
 	if (fSolutionFile->isOpen())
 	{
-		qDebug("[%s] File %s was opened, try to close");
+		log0("File %s was opened, try to close", sSolutionFile.toLatin1().constData());
 		fSolutionFile->close();
 	}
 
 	/* Create the default solution file */
 	if (fSolutionFile->open(QIODevice::WriteOnly | QIODevice::Text))
 	{
+		log0("Create default solution to %s", sSolutionFile.toLatin1().constData());
 		domRootSolutionElement = domDocument->createElement("solution");
 		domRootSolutionElement.setAttribute("name", "OpenGL 4.6");
 		domDocument->appendChild(domRootSolutionElement);
@@ -78,7 +83,7 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 	{
 		int iNodesCnt = 0;
 		int iIdx = 0;
-
+		log0("Open default solution from %s", sSolutionFile.toLatin1().constData());
 		domDocument->setContent(fSolutionFile);
 		domRootSolutionElement = domDocument->namedItem("solution").toElement();
 		domNodeList = domRootSolutionElement.childNodes();
@@ -87,7 +92,7 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 		for (iIdx; iIdx < iNodesCnt; iIdx++)
 		{
 			domProjectElement = domNodeList.at(iIdx).toElement();
-			qDebug("[%s] type=%s", __FUNCTION__, domProjectElement.attribute("name").toLatin1().constData());
+			log1("-> type=%s", domProjectElement.attribute("name").toLatin1().constData());
 		}
 	}
 

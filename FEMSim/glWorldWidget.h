@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QtGlobal>
 #include <QObject>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -8,42 +7,16 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
 
+#include <QFileInfo>
+#include <QMessageBox>
 
 #include <gl/GLU.h>
 #include <gl/GL.h>
 
-#include <QVector3D>
+#include "utilAbstractLoggedClass.h"
+#include "utilVertex.h"
 
-class Vertex
-{
-public:
-	// Constructors
-	Q_DECL_CONSTEXPR Vertex();
-	Q_DECL_CONSTEXPR explicit Vertex(const QVector3D &position);
-	Q_DECL_CONSTEXPR Vertex(const QVector3D &position, const QVector3D &color);
-
-	// Accessors / Mutators
-	Q_DECL_CONSTEXPR const QVector3D& position() const;
-	Q_DECL_CONSTEXPR const QVector3D& color() const;
-	void setPosition(const QVector3D& position);
-	void setColor(const QVector3D& color);
-
-	// OpenGL Helpers
-	static const int PositionTupleSize = 3;
-	static const int ColorTupleSize = 3;
-	static Q_DECL_CONSTEXPR int positionOffset();
-	static Q_DECL_CONSTEXPR int colorOffset();
-	static Q_DECL_CONSTEXPR int stride();
-
-private:
-	QVector3D m_position;
-	QVector3D m_color;
-};
-
-// Note: Q_MOVABLE_TYPE means it can be memcpy'd.
-Q_DECLARE_TYPEINFO(Vertex, Q_MOVABLE_TYPE);
-
-class GLWorldWidget : public QOpenGLWidget
+class GLWorldWidget : public QOpenGLWidget, public UtilAbstractLoggedClass
 {
 	Q_OBJECT
 
@@ -52,12 +25,13 @@ private:
 	QOpenGLBuffer m_vertex;
 	QOpenGLVertexArrayObject m_object;
 	QOpenGLShaderProgram *m_program;
-
+	UtilVertex sg_vertexes[3];
 
 public:
 	GLWorldWidget(QWidget *parent);
 	void initializeGL();
 	void resizeGL(int w, int h);
 	void paintGL();
+	void createTriangle();
 	~GLWorldWidget();
 };

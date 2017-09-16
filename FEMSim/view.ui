@@ -71,13 +71,13 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>300</width>
+        <width>320</width>
         <height>100</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>300</width>
+        <width>400</width>
         <height>16777215</height>
        </size>
       </property>
@@ -118,7 +118,7 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="QtModelWidget" name="ModelGLWidget">
+         <widget class="GLWorldWidget" name="ModelGLWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>1</horstretch>
@@ -147,9 +147,15 @@
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>320</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
-        <width>300</width>
+        <width>400</width>
         <height>200</height>
        </size>
       </property>
@@ -276,9 +282,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QtModelWidget</class>
+   <class>GLWorldWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header>QtModelWidget.h</header>
+   <header>glWorldWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

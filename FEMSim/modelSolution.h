@@ -2,9 +2,10 @@
 #include <QAbstractItemModel>
 #include <QDomDocument>
 #include "modelSolutionItem.h"
+#include "utilAbstractLoggedClass.h"
 
 class ModelSolution :
-    public QAbstractItemModel
+    public QAbstractItemModel, public UtilAbstractLoggedClass
 {
 	Q_OBJECT
 
@@ -30,6 +31,7 @@ class ModelSolution :
 
 		QVariant ModelSolution::parseElementDefault(const QModelIndex & index, ModelSolutionItem* item) const;
 		QVariant ModelSolution::parseElementSolution(const QModelIndex & index, ModelSolutionItem* item) const;
+
     private:
         QDomDocument domDocument;
         ModelSolutionItem *rootItem;

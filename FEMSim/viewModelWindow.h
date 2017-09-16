@@ -12,20 +12,24 @@
 
 #include "ui_view.h"
 #include "modelSolution.h"
+#include "utilLoggerSingleton.h"
 
-class ViewModelWindow : public QMainWindow
+class ViewModelWindow : public QMainWindow, public UtilAbstractLoggedClass
 {
 	Q_OBJECT
 private:
+	int m_SolutionOutputId = 0;
+	int m_ModelOutputId = 0;
+	ModelSolution* solutionModel;
+	Ui::FEMSimClass ui;
+	UtilLoggerSingleton* lg;
+
 
 public:
 	ViewModelWindow(QWidget *parent = Q_NULLPTR);
 	void LoadDefaultModel(QString sFilePath = "E:\default.fsm");
 	void LoadModel(QString sFilePath);
 	void SaveModel(QString sFilePath);
-private:
-	ModelSolution* solutionModel;
-	Ui::FEMSimClass ui;
 
 private slots:
 	void OpenModel();
