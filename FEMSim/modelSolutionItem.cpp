@@ -1,8 +1,6 @@
-#include "SolutionItem.h"
+#include "modelSolutionItem.h"
 
-
-
-SolutionItem::SolutionItem(QDomNode & node, int row, SolutionItem * parent)
+ModelSolutionItem::ModelSolutionItem(QDomNode & node, int row, ModelSolutionItem * parent)
 {
 	domNode = node;
 	// Record the item's location within its parent.
@@ -10,18 +8,18 @@ SolutionItem::SolutionItem(QDomNode & node, int row, SolutionItem * parent)
 	parentItem = parent;
 }
 
-SolutionItem::~SolutionItem()
+ModelSolutionItem::~ModelSolutionItem()
 {
-	QHash<int, SolutionItem*>::iterator itr;
+	QHash<int, ModelSolutionItem*>::iterator itr;
 	for (itr = childItems.begin(); itr != childItems.end(); ++itr)
 	{
 		delete itr.value();
 	}
 }
 
-SolutionItem * SolutionItem::child(int i)
+ModelSolutionItem * ModelSolutionItem::child(int i)
 {
-	SolutionItem* ret;
+	ModelSolutionItem* ret;
 	if (childItems.contains(i))
 	{
 		ret = childItems[i];
@@ -31,7 +29,7 @@ SolutionItem * SolutionItem::child(int i)
 		if ((i >= 0) && (i < domNode.childNodes().count()))
 		{
 			QDomNode childNode = domNode.childNodes().item(i);
-			SolutionItem *childItem = new SolutionItem(childNode, i, this);
+			ModelSolutionItem *childItem = new ModelSolutionItem(childNode, i, this);
 			childItems[i] = childItem;
 			ret = childItem;
 		}
@@ -39,17 +37,17 @@ SolutionItem * SolutionItem::child(int i)
 	return ret;
 }
 
-SolutionItem * SolutionItem::parent()
+ModelSolutionItem * ModelSolutionItem::parent()
 {
 	return parentItem;
 }
 
-QDomNode SolutionItem::node() const
+QDomNode ModelSolutionItem::node() const
 {
 	return domNode;
 }
 
-int SolutionItem::row()
+int ModelSolutionItem::row()
 {
 	return rowNumber;
 }

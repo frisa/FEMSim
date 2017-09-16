@@ -1,19 +1,17 @@
-#include "SolutionModel.h"
+#include "modelSolution.h"
 
-#define COUNT_OF_COLUMNS 3
-
-SolutionModel::SolutionModel(QDomDocument document, QObject *parent) : QAbstractItemModel(parent), domDocument(document)
+ModelSolution::ModelSolution(QDomDocument document, QObject *parent) : QAbstractItemModel(parent), domDocument(document)
 {
     qDebug("[%s] document: %s", __FUNCTION__, document.toString().toLatin1());
-    rootItem = new SolutionItem(domDocument, 0);
+    rootItem = new ModelSolutionItem(domDocument, 0);
 }
 
-SolutionModel::~SolutionModel()
+ModelSolution::~ModelSolution()
 {
     delete rootItem;
 }
 
-QVariant SolutionModel::headerData(int section, Qt::Orientation orientation, int role)
+QVariant ModelSolution::headerData(int section, Qt::Orientation orientation, int role)
 {
     QVariant ret;
 
@@ -44,7 +42,7 @@ QVariant SolutionModel::headerData(int section, Qt::Orientation orientation, int
     return ret;
 }
 
-Qt::ItemFlags SolutionModel::flags(const QModelIndex & index) const
+Qt::ItemFlags ModelSolution::flags(const QModelIndex & index) const
 {
     Qt::ItemFlags ret;
     if (false == index.isValid())
@@ -58,7 +56,7 @@ Qt::ItemFlags SolutionModel::flags(const QModelIndex & index) const
     return ret;
 }
 
-Q_INVOKABLE QModelIndex SolutionModel::index(int row, int column, const QModelIndex & parent) const
+Q_INVOKABLE QModelIndex ModelSolution::index(int row, int column, const QModelIndex & parent) const
 {
     QModelIndex ret;
 
@@ -68,17 +66,17 @@ Q_INVOKABLE QModelIndex SolutionModel::index(int row, int column, const QModelIn
     }
     else
     {
-        SolutionItem *parentItem;
+		ModelSolutionItem *parentItem;
         if (parent.isValid())
         {
-            parentItem = static_cast<SolutionItem*>(parent.internalPointer());
+            parentItem = static_cast<ModelSolutionItem*>(parent.internalPointer());
         }
         else
         {
             parentItem = rootItem;
         }
 
-        SolutionItem *childItem = parentItem->child(row);
+		ModelSolutionItem *childItem = parentItem->child(row);
         if (childItem)
         {
             ret = createIndex(row, column, childItem);
@@ -92,7 +90,7 @@ Q_INVOKABLE QModelIndex SolutionModel::index(int row, int column, const QModelIn
     return ret;
 }
 
-Q_INVOKABLE QModelIndex SolutionModel::parent(const QModelIndex & child) const
+Q_INVOKABLE QModelIndex ModelSolution::parent(const QModelIndex & child) const
 {
     QModelIndex ret;
     if (!child.isValid())
@@ -101,8 +99,8 @@ Q_INVOKABLE QModelIndex SolutionModel::parent(const QModelIndex & child) const
     }
     else
     {
-        SolutionItem *childItem = static_cast<SolutionItem*>(child.internalPointer());
-        SolutionItem *parentItem = childItem->parent();
+		ModelSolutionItem *childItem = static_cast<ModelSolutionItem*>(child.internalPointer());
+		ModelSolutionItem *parentItem = childItem->parent();
 
         if ((!parentItem) || (parentItem == rootItem))
         {
@@ -117,9 +115,9 @@ Q_INVOKABLE QModelIndex SolutionModel::parent(const QModelIndex & child) const
     return ret;
 }
 
-Q_INVOKABLE int SolutionModel::rowCount(const QModelIndex & parent) const
+Q_INVOKABLE int ModelSolution::rowCount(const QModelIndex & parent) const
 {
-    SolutionItem *parentItem;
+	ModelSolutionItem *parentItem;
     int ret;
 
     if (parent.column() > 0)
@@ -133,21 +131,21 @@ Q_INVOKABLE int SolutionModel::rowCount(const QModelIndex & parent) const
     }
     else
     {
-        parentItem = static_cast<SolutionItem*>(parent.internalPointer());
+        parentItem = static_cast<ModelSolutionItem*>(parent.internalPointer());
     }
     ret = parentItem->node().childNodes().count();
     qDebug("[%s] ret = %d", __FUNCTION__, ret);
     return ret;
 }
 
-Q_INVOKABLE int SolutionModel::columnCount(const QModelIndex & parent) const
+Q_INVOKABLE int ModelSolution::columnCount(const QModelIndex & parent) const
 {
     int ret = COUNT_OF_COLUMNS;
     qDebug("[%s] ret = %d", __FUNCTION__, ret);
     return ret;
 }
 
-Q_INVOKABLE QVariant SolutionModel::data(const QModelIndex & index, int role) const
+Q_INVOKABLE QVariant ModelSolution::data(const QModelIndex & index, int role) const
 {
     QVariant ret;
     int i32Column = 0;
@@ -163,7 +161,7 @@ Q_INVOKABLE QVariant SolutionModel::data(const QModelIndex & index, int role) co
         }
         else
         {
-            SolutionItem *item = static_cast<SolutionItem*>(index.internalPointer());
+			ModelSolutionItem *item = static_cast<ModelSolutionItem*>(index.internalPointer());
             //ret = parseElementDefault(index, item);
             ret = parseElementSolution(index, item);
 
@@ -173,7 +171,7 @@ Q_INVOKABLE QVariant SolutionModel::data(const QModelIndex & index, int role) co
     return ret;
 }
 
-QVariant SolutionModel::parseElementDefault(const QModelIndex & index, SolutionItem* item) const
+QVariant ModelSolution::parseElementDefault(const QModelIndex & index, ModelSolutionItem* item) const
 {
     QVariant ret;
     QDomNode node = item->node();
@@ -208,7 +206,7 @@ QVariant SolutionModel::parseElementDefault(const QModelIndex & index, SolutionI
     return ret;
 }
 
-QVariant SolutionModel::parseElementSolution(const QModelIndex & index, SolutionItem * item) const
+QVariant ModelSolution::parseElementSolution(const QModelIndex & index, ModelSolutionItem * item) const
 {
     QVariant ret;
     QDomElement domElement = item->node().toElement();

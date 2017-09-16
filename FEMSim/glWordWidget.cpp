@@ -1,6 +1,7 @@
-#include "QtModelWidget.h"
 #include <QFileInfo>
 #include <QMessageBox>
+
+#include "glWorldWidget.h"
 
 
 /*******************************************************************************
@@ -35,12 +36,12 @@ static const Vertex sg_vertexes[] = {
 * Implementation of the Model Widget
 ******************************************************************************/
 
-QtModelWidget::QtModelWidget(QWidget *parent)
+GLWorldWidget::GLWorldWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
 }
 
-void QtModelWidget::initializeGL()
+void GLWorldWidget::initializeGL()
 {
 	QFileInfo fiVert("e:\\_git\\FEMSim\\FEMSim\\shaders\\simple.vert");
 	QFileInfo fiFrag("e:\\_git\\FEMSim\\FEMSim\\shaders\\simple.frag");
@@ -83,12 +84,12 @@ void QtModelWidget::initializeGL()
 	}
 }
 
-void QtModelWidget::resizeGL(int w, int h)
+void GLWorldWidget::resizeGL(int w, int h)
 {
 
 }
 
-void QtModelWidget::paintGL()
+void GLWorldWidget::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	m_program->bind();
@@ -100,6 +101,6 @@ void QtModelWidget::paintGL()
 	m_program->release();
 }
 
-QtModelWidget::~QtModelWidget()
+GLWorldWidget::~GLWorldWidget()
 {
 }

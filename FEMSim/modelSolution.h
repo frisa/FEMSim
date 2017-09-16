@@ -1,21 +1,23 @@
 #pragma once
 #include <QAbstractItemModel>
 #include <QDomDocument>
-#include "SolutionItem.h"
+#include "modelSolutionItem.h"
 
-class SolutionModel :
+class ModelSolution :
     public QAbstractItemModel
 {
-        Q_OBJECT
+	Q_OBJECT
+
 		enum Columns
-		{	
+		{
 			COLUMN0 = 0,
 			COLUMN1 = 1,
 			COLUMN2 = 2,
+			COUNT_OF_COLUMNS = 3
 		};
     public:
-        explicit SolutionModel(QDomDocument document, QObject *parent=0);
-        ~SolutionModel();
+        explicit ModelSolution(QDomDocument document, QObject *parent=0);
+        ~ModelSolution();
         // The additional functions
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
         Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -26,10 +28,10 @@ class SolutionModel :
         virtual Q_INVOKABLE int columnCount(const QModelIndex & parent = QModelIndex()) const override;
         virtual Q_INVOKABLE QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
 
-		QVariant SolutionModel::parseElementDefault(const QModelIndex & index, SolutionItem* item) const;
-		QVariant SolutionModel::parseElementSolution(const QModelIndex & index, SolutionItem* item) const; 
+		QVariant ModelSolution::parseElementDefault(const QModelIndex & index, ModelSolutionItem* item) const;
+		QVariant ModelSolution::parseElementSolution(const QModelIndex & index, ModelSolutionItem* item) const;
     private:
         QDomDocument domDocument;
-        SolutionItem *rootItem;
+        ModelSolutionItem *rootItem;
 };
 

@@ -1,19 +1,7 @@
-#include "FEMSim.h"
-
-#include <QXmlStreamWriter>
-#include <QFile>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QDomDocument>
-#include <QTextStream>
-
-#include "SolutionModel.h"
-#include "QtModelWidget.h"
-
+#include "viewModelWindow.h"
 using namespace std;
 
-
-FEMSim::FEMSim(QWidget *parent)
+ViewModelWindow::ViewModelWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -22,16 +10,10 @@ FEMSim::FEMSim(QWidget *parent)
 	/* Initialize connection */
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(OpenModel()));
 
-	FEMSim::LoadDefaultModel();
+	ViewModelWindow::LoadDefaultModel();
 }
 
-void FEMSim::Test()
-{
-	vector<int> pInts;
-	
-}
-
-void FEMSim::LoadDefaultModel(QString sFilePath)
+void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 {
 	QDomProcessingInstruction domHeader;
 	QDomDocument *domDocument = new QDomDocument();
@@ -48,7 +30,7 @@ void FEMSim::LoadDefaultModel(QString sFilePath)
 	QString sSolutionFile = QStringLiteral("E:\\solution.xml");
 	QFile *fSolutionFile;
 
-	solutionModel = new SolutionModel(*domDocument, this);
+	solutionModel = new ModelSolution(*domDocument, this);
 	fSolutionFile = new QFile(sSolutionFile);
 
 	if (!fSolutionFile->exists())
@@ -66,20 +48,19 @@ void FEMSim::LoadDefaultModel(QString sFilePath)
 		fSolutionFile->close();
 	}
 
+	/* Create the default solution file */
 	if (fSolutionFile->open(QIODevice::WriteOnly | QIODevice::Text))
 	{
-		//domHeader = domDocument->createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-		//domDocument->appendChild(domHeader);
 		domRootSolutionElement = domDocument->createElement("solution");
-		domRootSolutionElement.setAttribute("name", "DefaultSolution");
+		domRootSolutionElement.setAttribute("name", "OpenGL 4.6");
 		domDocument->appendChild(domRootSolutionElement);
 
 		domProjectElement = domDocument->createElement("project");
-		domProjectElement.setAttribute("name", "DefaultProject1");
+		domProjectElement.setAttribute("name", "OpenGL Basics");
 		domRootSolutionElement.appendChild(domProjectElement);
 		
 		domModelElement = domDocument->createElement("model");
-		domModelElement.setAttribute("name", "DefaultModel1");
+		domModelElement.setAttribute("name", "Model (Shaders)");
 		domProjectElement.appendChild(domModelElement);
 
 		domCubeElement = domDocument->createElement("part");
@@ -109,23 +90,27 @@ void FEMSim::LoadDefaultModel(QString sFilePath)
 			qDebug("[%s] type=%s", __FUNCTION__, domProjectElement.attribute("name").toLatin1().constData());
 		}
 	}
-	SolutionModel *newModel = new SolutionModel(*domDocument, this);
+
+	/* Load the default solution file to as model */
+	ModelSolution *newModel = new ModelSolution(*domDocument, this);
 	ui.SolutionTreeView->setModel(newModel);
 	delete solutionModel;
 	solutionModel = newModel;
 
+	/* Set the layout of the tree view */
+	this->ui.SolutionTreeView->expandAll();
 	this->ui.SolutionTreeView->setColumnWidth(0, 150);
 }
 
-void FEMSim::LoadModel(QString sFilePath)
+void ViewModelWindow::LoadModel(QString sFilePath)
 {
 }
 
-void FEMSim::SaveModel(QString sFilePath)
+void ViewModelWindow::SaveModel(QString sFilePath)
 {
 }
 
-void FEMSim::OpenModel()
+void ViewModelWindow::OpenModel()
 {
 	QString xmlPath = "E:\\E:\solution.xml";
 	QString filePath = QFileDialog::getOpenFileName(this, "Open solution file", xmlPath, "XML files (*.xml)");
@@ -141,7 +126,7 @@ void FEMSim::OpenModel()
 			if (document.setContent(&file)) 
 			{
 				qDebug("[%s] FilePath = %s", __FUNCTION__, filePath.toLatin1().constData());
-				SolutionModel *newModel = new SolutionModel(document, this);
+				ModelSolution *newModel = new ModelSolution(document, this);
 				try {
 					ui.SolutionTreeView->setModel(newModel);
 					delete solutionModel;

@@ -43,7 +43,7 @@ private:
 // Note: Q_MOVABLE_TYPE means it can be memcpy'd.
 Q_DECLARE_TYPEINFO(Vertex, Q_MOVABLE_TYPE);
 
-class QtModelWidget : public QOpenGLWidget
+class GLWorldWidget : public QOpenGLWidget
 {
 	Q_OBJECT
 
@@ -55,9 +55,9 @@ private:
 
 
 public:
-	QtModelWidget(QWidget *parent);
+	GLWorldWidget(QWidget *parent);
 	void initializeGL();
 	void resizeGL(int w, int h);
 	void paintGL();
-	~QtModelWidget();
+	~GLWorldWidget();
 };
