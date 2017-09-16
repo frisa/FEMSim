@@ -119,7 +119,7 @@ void ViewModelWindow::OpenModel()
 {
 	QString xmlPath = "E:\\E:\solution.xml";
 	QString filePath = QFileDialog::getOpenFileName(this, "Open solution file", xmlPath, "XML files (*.xml)");
-	qDebug("File: " + filePath.toLatin1());
+	log0("File: [%s]", filePath.toLatin1());
 	QMessageBox msg;
 
 	if (!filePath.isEmpty()) 
@@ -130,7 +130,7 @@ void ViewModelWindow::OpenModel()
 			QDomDocument document;
 			if (document.setContent(&file)) 
 			{
-				qDebug("[%s] FilePath = %s", __FUNCTION__, filePath.toLatin1().constData());
+				log0("[%s] FilePath = %s", __FUNCTION__, filePath.toLatin1().constData());
 				ModelSolution *newModel = new ModelSolution(document, this);
 				try {
 					ui.SolutionTreeView->setModel(newModel);
@@ -141,7 +141,7 @@ void ViewModelWindow::OpenModel()
 				catch (std::exception &e)
 				{
 					//QMessageBox(this, "Exception", e.what(), QMessageBox::Ok);
-					qDebug("Exception: %s\n", e.what());
+					log0("Exception: %s\n", e.what());
 				}
 
 			}
