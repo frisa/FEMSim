@@ -19,17 +19,42 @@ ViewModelWindow::ViewModelWindow(QWidget *parent)
 
 void ViewModelWindow::selectionChangedSlot(const QItemSelection &, const QItemSelection &)
 {
-	const QModelIndex index = this->ui.SolutionTreeView->selectionModel()->currentIndex();
-	QString selectedText = index.data(Qt::DisplayRole).toString();
+	const QModelIndex currentIndex = this->ui.SolutionTreeView->selectionModel()->currentIndex();
+	QString selectedText = currentIndex.data(Qt::DisplayRole).toString();
+	log0("========================");
+	log0("-> selectedText: %s", selectedText.toLatin1().data());
+	log0("-> selectedIndex: 0x%x", currentIndex);
+	log0("-> selectedIndex.internalId: %d", currentIndex.internalId());
+	log0("-> selectedIndex.column: %d", currentIndex.column());
+	log0("-> selectedIndex.row: %d", currentIndex.row());
+
+	return;
+
+	/*
+	
 	int hierarchyLevel = 1;
 	QModelIndex seekRoot = index;
+	QModelIndex iChild = index.child(0, 0);
+	QString childText = iChild.data(Qt::DisplayRole).toString();
+
+
+
+	return;
+
 	char cShowString[500];
 	while (seekRoot.parent() != QModelIndex())
 	{
 		seekRoot = seekRoot.parent();
 		hierarchyLevel++;
 	}
+	m_vertexes = new UtilVertex[3];
+	m_vertexesCnt = 3 * (2 * 3 * 4);
+	m_vertexes[0] = UtilVertex(QVector3D(0.00f, 0.75f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f));
+	m_vertexes[1] = UtilVertex(QVector3D(0.75f, -0.75f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f));
+	m_vertexes[2] = UtilVertex(QVector3D(-0.75f, -0.75f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f));
+	ui.ModelGLWidget->renderPart(0, m_vertexes, m_vertexesCnt);
 	log0("-> selected[%d]: %s", hierarchyLevel, selectedText.toLatin1().data());
+	*/
 }
 
 void ViewModelWindow::LoadDefaultModel(QString sFilePath)
@@ -86,7 +111,30 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 
 		domPartElement = domDocument->createElement("part");
 		domPartElement.setAttribute("name", "PointCloud");
-		domPartElement.setAttribute("GLenum", "GL_POINTS");
+		domPartElement.setAttribute("GLenum", "0");
+		domModelElement.appendChild(domPartElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "0.00");
+		domVertexElement.setAttribute("y", "0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "0.75");
+		domVertexElement.setAttribute("y", "-0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
+
+		domVertexElement = domDocument->createElement("Vertex");
+		domVertexElement.setAttribute("x", "-0.75");
+		domVertexElement.setAttribute("y", "-0.75");
+		domVertexElement.setAttribute("z", "1.00");
+		domPartElement.appendChild(domVertexElement);
+
+		domPartElement = domDocument->createElement("part");
+		domPartElement.setAttribute("name", "Triangles");
+		domPartElement.setAttribute("GLenum", "4");
 		domModelElement.appendChild(domPartElement);
 
 		domVertexElement = domDocument->createElement("Vertex");
@@ -136,9 +184,11 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 	solutionModel = newModel;
 
 	/* Set the layout of the tree view */
+	this->ui.SolutionTreeView->setStyleSheet("QTreeWidget::item { border-bottom: 1px solid black;}");
 	this->ui.SolutionTreeView->expandAll();
 	this->ui.SolutionTreeView->setColumnWidth(0, 170);
 	this->ui.SolutionTreeView->setColumnWidth(1, 130);
+	this->ui.SolutionTreeView->setAllColumnsShowFocus(true);
 
 	QItemSelectionModel *selectionModel = this->ui.SolutionTreeView->selectionModel();
 	connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -155,7 +205,7 @@ void ViewModelWindow::SaveModel(QString sFilePath)
 
 void ViewModelWindow::openModelSlot()
 {
-	QString xmlPath = "E:\\E:\solution.xml";
+	QString xmlPath = "E:\\solution.xml";
 	QString filePath = QFileDialog::getOpenFileName(this, "Open solution file", xmlPath, "XML files (*.xml)");
 	log0("File: [%s]", filePath.toLatin1().data());
 

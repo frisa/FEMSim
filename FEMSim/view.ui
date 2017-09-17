@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="FEMSim.qrc">
-    <normaloff>:/Icons/E:/Icons/bender00.ico</normaloff>:/Icons/E:/Icons/bender00.ico</iconset>
+    <normaloff>:/Icons/Resources/Icons/bender00.ico</normaloff>:/Icons/Resources/Icons/bender00.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
@@ -139,8 +139,30 @@
       </widget>
      </widget>
     </item>
+    <item row="1" column="2">
+     <widget class="QTextEdit" name="tbModelLog">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
-     <widget class="QTextBrowser" name="tbSolutionLog">
+     <widget class="QTextEdit" name="tbSolutionLog">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>1</horstretch>
@@ -159,27 +181,8 @@
         <height>200</height>
        </size>
       </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QTextBrowser" name="tbModelLog">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>200</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>200</height>
-       </size>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -245,7 +248,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="FEMSim.qrc">
-     <normaloff>:/FEMSim/E:/Icons/new00.ico</normaloff>:/FEMSim/E:/Icons/new00.ico</iconset>
+     <normaloff>:/Icons/Resources/Icons/new00.ico</normaloff>:/Icons/Resources/Icons/new00.ico</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -254,7 +257,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="FEMSim.qrc">
-     <normaloff>:/FEMSim/E:/Icons/open00.ico</normaloff>:/FEMSim/E:/Icons/open00.ico</iconset>
+     <normaloff>:/Icons/Resources/Icons/open00.ico</normaloff>:/Icons/Resources/Icons/open00.ico</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -263,7 +266,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="FEMSim.qrc">
-     <normaloff>:/Icons/E:/Icons/save00.ico</normaloff>:/Icons/E:/Icons/save00.ico</iconset>
+     <normaloff>:/Icons/Resources/Icons/save00.ico</normaloff>:/Icons/Resources/Icons/save00.ico</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -272,7 +275,7 @@
   <action name="actionExit">
    <property name="icon">
     <iconset resource="FEMSim.qrc">
-     <normaloff>:/Icons/E:/Icons/exit00.ico</normaloff>:/Icons/E:/Icons/exit00.ico</iconset>
+     <normaloff>:/Icons/Resources/Icons/exit00.ico</normaloff>:/Icons/Resources/Icons/exit00.ico</iconset>
    </property>
    <property name="text">
     <string>Exit</string>

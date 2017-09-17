@@ -1,11 +1,24 @@
 <RCC>
-    <qresource prefix="/FEMSim">
-        <file>E:/Icons/open00.ico</file>
-        <file>E:/Icons/new00.ico</file>
-    </qresource>
+    <qresource prefix="/FEMSim"/>
     <qresource prefix="/Icons">
-        <file>E:/Icons/save00.ico</file>
-        <file>E:/Icons/bender00.ico</file>
-        <file>E:/Icons/exit00.ico</file>
+        <file>Resources/Icons/bender00.ico</file>
+        <file>Resources/Icons/exit00.ico</file>
+        <file>Resources/Icons/new00.ico</file>
+        <file>Resources/Icons/open00.ico</file>
+        <file>Resources/Icons/save00.ico</file>
+    </qresource>
+    <qresource prefix="/StyleSheet">
+        <file>Resources/StyleSheets/Style.css</file>
+    </qresource>
+    <qresource prefix="/Shaders">
+        <file>Resources/Shaders/simple.vert</file>
+        <file>Resources/Shaders/simple.frag</file>
+    </qresource>
+    <qresource prefix="/Pictures">
+        <file>Resources/Pictures/styleSheetTreeView/closed.png</file>
+        <file>Resources/Pictures/styleSheetTreeView/end.png</file>
+        <file>Resources/Pictures/styleSheetTreeView/more.png</file>
+        <file>Resources/Pictures/styleSheetTreeView/open.png</file>
+        <file>Resources/Pictures/styleSheetTreeView/vline.png</file>
     </qresource>
 </RCC>

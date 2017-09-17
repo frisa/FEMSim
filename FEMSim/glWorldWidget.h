@@ -34,4 +34,6 @@ public:
 	void paintGL();
 	void createTriangle();
 	~GLWorldWidget();
+public:
+	void renderPart(int GLenum, UtilVertex vertexes[], int vertexes_cnt);
 };

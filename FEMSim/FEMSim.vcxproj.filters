@@ -28,6 +28,9 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{6fa61f77-b318-46c4-815e-cbe999737465}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,5 +106,16 @@
     <ClInclude Include="utilAbstractLoggedClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\simple.vert">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="Resources\Shaders\simple.frag">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="Resources\StyleSheets\Style.css">
+      <Filter>Resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

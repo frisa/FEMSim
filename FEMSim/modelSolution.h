@@ -1,4 +1,8 @@
 #pragma once
+#include <windows.h>
+#include <gl/GLU.h>
+#include <gl/GL.h>
+
 #include <QAbstractItemModel>
 #include <QDomDocument>
 #include "modelSolutionItem.h"
@@ -20,7 +24,7 @@ class ModelSolution :
         explicit ModelSolution(QDomDocument document, QObject *parent=0);
         ~ModelSolution();
         // The additional functions
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         Qt::ItemFlags flags(const QModelIndex &index) const override;
         // Inherited via QAbstractItemModel
         virtual Q_INVOKABLE QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;

@@ -23,11 +23,12 @@ private:
 	ModelSolution* solutionModel;
 	Ui::FEMSimClass ui;
 	UtilLoggerSingleton* lg;
-
+	UtilVertex* m_vertexes;
+	int m_vertexesCnt;
 
 public:
 	ViewModelWindow(QWidget *parent = Q_NULLPTR);
-	void LoadDefaultModel(QString sFilePath = "E:\default.fsm");
+	void LoadDefaultModel(QString sFilePath = "E:\\default.fsm");
 	void LoadModel(QString sFilePath);
 	void SaveModel(QString sFilePath);
 
