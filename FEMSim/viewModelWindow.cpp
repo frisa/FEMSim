@@ -1,4 +1,5 @@
 #include "viewModelWindow.h"
+#include <QStandardItem>
 
 using namespace std;
 
@@ -14,13 +15,27 @@ ViewModelWindow::ViewModelWindow(QWidget *parent)
 	UtilLoggerSingleton::instance()->addOutput(m_SolutionOutputId, ui.tbSolutionLog);
 	UtilLoggerSingleton::instance()->addOutput(m_ModelOutputId, ui.tbModelLog);
 
+	ui.SolutionTreeView->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 	ViewModelWindow::LoadDefaultModel();
 }
 
-void ViewModelWindow::selectionChangedSlot(const QItemSelection &, const QItemSelection &)
+void ViewModelWindow::selectionChangedSlot(const QItemSelection & selected, const QItemSelection & deselected)
 {
-	const QModelIndex currentIndex = this->ui.SolutionTreeView->selectionModel()->currentIndex();
+	QItemSelectionModel* selectionModel = this->ui.SolutionTreeView->selectionModel();
+	QItemSelection selection = selectionModel->selection();
+	const QModelIndex currentIndex = selectionModel->currentIndex();
 	QString selectedText = currentIndex.data(Qt::DisplayRole).toString();
+	QItemSelection invalid;
+
+	Q_FOREACH(QModelIndex index, selection.indexes())
+	{
+		if (index.parent() == currentIndex.parent())
+		{
+			continue;
+		}
+		invalid.select(index, index);
+	}
+
 	log0("========================");
 	log0("-> selectedText: %s", selectedText.toLatin1().data());
 	log0("-> selectedIndex: 0x%x", currentIndex);
@@ -28,7 +43,26 @@ void ViewModelWindow::selectionChangedSlot(const QItemSelection &, const QItemSe
 	log0("-> selectedIndex.column: %d", currentIndex.column());
 	log0("-> selectedIndex.row: %d", currentIndex.row());
 
+	//selectionModel->select(invalid, QItemSelectionModel::Deselect);
+	
+	/*
+	QString selectedText = currentIndex.data(Qt::DisplayRole).toString();
+	QStandardItem *item = selectionModel->children;
+
+	log0("========================");
+	log0("-> selectedText: %s", selectedText.toLatin1().data());
+	log0("-> selectedIndex: 0x%x", currentIndex);
+	log0("-> selectedIndex.internalId: %d", currentIndex.internalId());
+	log0("-> selectedIndex.column: %d", currentIndex.column());
+	log0("-> selectedIndex.row: %d", currentIndex.row());
+
+	for (int r = 0; r < item->rowCount(); r++)
+	{
+		QModelIndex childIndex = this->ui.SolutionTreeView->model->index(r, 0, currentIndex);
+		this->ui.SolutionTreeView->selectionModel()->select(childIndex, QItemSelectionModel::Select);
+	}
 	return;
+	*/
 
 	/*
 	
@@ -188,7 +222,6 @@ void ViewModelWindow::LoadDefaultModel(QString sFilePath)
 	this->ui.SolutionTreeView->expandAll();
 	this->ui.SolutionTreeView->setColumnWidth(0, 170);
 	this->ui.SolutionTreeView->setColumnWidth(1, 130);
-	this->ui.SolutionTreeView->setAllColumnsShowFocus(true);
 
 	QItemSelectionModel *selectionModel = this->ui.SolutionTreeView->selectionModel();
 	connect(selectionModel, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),

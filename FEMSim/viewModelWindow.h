@@ -34,5 +34,5 @@ public:
 
 private slots:
 	void openModelSlot();
-	void selectionChangedSlot(const QItemSelection &, const QItemSelection &);
+	void selectionChangedSlot(const QItemSelection & selected, const QItemSelection & deselected);
 };
