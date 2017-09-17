@@ -81,14 +81,15 @@ void ViewModelWindow::selectionChangedSlot(const QItemSelection & selected, cons
 		seekRoot = seekRoot.parent();
 		hierarchyLevel++;
 	}
+	*/
 	m_vertexes = new UtilVertex[3];
 	m_vertexesCnt = 3 * (2 * 3 * 4);
 	m_vertexes[0] = UtilVertex(QVector3D(0.00f, 0.75f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f));
 	m_vertexes[1] = UtilVertex(QVector3D(0.75f, -0.75f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f));
 	m_vertexes[2] = UtilVertex(QVector3D(-0.75f, -0.75f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f));
 	ui.ModelGLWidget->renderPart(0, m_vertexes, m_vertexesCnt);
-	log0("-> selected[%d]: %s", hierarchyLevel, selectedText.toLatin1().data());
-	*/
+	//log0("-> selected[%d]: %s", hierarchyLevel, selectedText.toLatin1().data());
+	
 }
 
 void ViewModelWindow::LoadDefaultModel(QString sFilePath)
